@@ -1,4 +1,8 @@
+import 'package:chopper/chopper.dart';
+import 'package:chopper_one_app/model/popular.dart';
+import 'package:chopper_one_app/service/movie_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MovieListings extends StatefulWidget {
   @override
@@ -16,15 +20,45 @@ class _MovieListingsState extends State<MovieListings> {
     );
   }
 
-  Widget _buildBody(BuildContext context) {
-    return _buildMovieList(context);
+  FutureBuilder<Response<Popular>> _buildBody(BuildContext context) {
+    final http = Provider.of<MovieService>(context);
+
+    return FutureBuilder<Response<Popular>>(
+      future: http.getPopularMovies(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                snapshot.error.toString(),
+                textAlign: TextAlign.center,
+                textScaleFactor: 1.3,
+              ),
+            );
+          }
+          // 5
+          final popular = snapshot.data.body;
+          // 6
+          return _buildMovieList(context, popular);
+        } else {
+          // 7
+          // Show a loading indicator while waiting for the movies
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
   }
 
-  ListView _buildMovieList(BuildContext context) {
+  ListView _buildMovieList(BuildContext context, Popular popular) {
+    // 1
     return ListView.builder(
-      itemCount: 1,
+      // 2
+      itemCount: popular.results.length,
       padding: EdgeInsets.all(8),
       itemBuilder: (context, index) {
+        // 3
         return Card(
           elevation: 4,
           child: Padding(
@@ -37,15 +71,18 @@ class _MovieListingsState extends State<MovieListings> {
                   height: 200,
                   decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: NetworkImage(IMAGE_URL + "/xBHvZcjRiWyobQ9kxBhO6B2dtRI.jpg"), fit: BoxFit.contain)),
+                          // 4
+                          image: NetworkImage(IMAGE_URL + popular.results[index].posterPath),
+                          fit: BoxFit.contain)),
                 ),
                 Expanded(
                   child: Container(
                     height: 200,
                     child: Column(
                       children: <Widget>[
+                        // 5
                         Text(
-                          "Ad Astra",
+                          popular.results[index].title,
                           style: TextStyle(fontSize: 14),
                         ),
                         SizedBox(
@@ -54,7 +91,8 @@ class _MovieListingsState extends State<MovieListings> {
                         Expanded(
                             child: Container(
                                 child: Text(
-                          "The near future, a time when both hope and hardships drive humanity to look to the stars and beyond. While a mysterious phenomenon menaces to destroy life on planet Earth, astronaut Roy McBride undertakes a mission across the immensity of space and its many perils to uncover the truth about a lost expedition that decades before boldly faced emptiness and silence in search of the unknown.",
+                          // 6
+                          popular.results[index].overview,
                           style: TextStyle(fontSize: 12),
                         ))),
                       ],

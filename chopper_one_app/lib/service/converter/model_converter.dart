@@ -5,8 +5,13 @@ import 'package:chopper_one_app/model/popular.dart';
 
 class ModelConverter implements Converter {
   @override
-  FutureOr<Request> convertRequest(Request request) {
-    final req = applyHeader(request, contentTypeKey, jsonHeaders, override: false);
+  Request convertRequest(Request request) {
+    final req = applyHeader(
+      request,
+      contentTypeKey,
+      jsonHeaders,
+      override: false,
+    );
 
     return encodeJson(req);
   }
@@ -37,6 +42,7 @@ class ModelConverter implements Converter {
     if (contentType != null && contentType.contains(jsonHeaders)) {
       return request.copyWith(body: json.encode(request.body));
     }
+
     return request;
   }
 }

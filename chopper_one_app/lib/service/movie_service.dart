@@ -13,13 +13,26 @@ abstract class MovieService extends ChopperService {
       services: [
         _$MovieService(),
       ],
-      interceptors: [HeaderInterceptor(), HttpLoggingInterceptor()],
-      converter: ModelConverter(),
-      errorConverter: JsonConverter(),
+      interceptors: [
+        //HeaderInterceptor(),
+        HttpLoggingInterceptor(),
+        (Request request) async {
+          if (request.method == HttpMethod.Get) {
+            chopperLogger.info('Performed a GET request');
+          }
+          return request;
+        },
+        (Response response) async {
+          chopperLogger.info(response.statusCode.toString());
+          return response;
+        },
+      ],
+      /*converter: ModelConverter(),
+      errorConverter: JsonConverter(),*/
     );
     return _$MovieService(client);
   }
 
-  @Get(path: 'movie/popular')
+  @Get(path: 'movie/popular?api_key=b161177d03774168afab88061eb8e2a2')
   Future<Response<Popular>> getPopularMovies();
 }
