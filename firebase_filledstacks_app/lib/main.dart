@@ -1,4 +1,5 @@
 import 'package:firebase_filledstacks_app/ui/views/signup_view.dart';
+import 'package:firebase_filledstacks_app/ui/views/startup_view.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_filledstacks_app/services/navigation_service.dart';
 import 'package:firebase_filledstacks_app/services/dialog_service.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
               fontFamily: 'Open Sans',
             ),
       ),
-      home: SignUpView(),
+      home: StartUpView(),
       onGenerateRoute: generateRoute,
     );
   }

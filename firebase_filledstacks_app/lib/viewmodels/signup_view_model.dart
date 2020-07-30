@@ -12,13 +12,18 @@ class SignUpViewModel extends BaseModel {
   final DialogService _dialogService = locator<DialogService>();
   final NavigationService _navigationService = locator<NavigationService>();
 
-  Future signUp({
-    @required String email,
-    @required String password,
-  }) async {
+  String _selectedRole = 'Select a User Role';
+  String get selectedRole => _selectedRole;
+
+  Future signUp({@required String email, @required String password, @required String fullName}) async {
     setBusy(true);
 
-    var result = await _authenticationService.signUpWithEmail(email: email, password: password);
+    var result = await _authenticationService.signUpWithEmail(
+      email: email,
+      password: password,
+      fullName: fullName,
+      role: _selectedRole,
+    );
 
     setBusy(false);
     if (result is bool) {
@@ -36,5 +41,10 @@ class SignUpViewModel extends BaseModel {
         description: result,
       );
     }
+  }
+
+  void setSelectedRole(String role) {
+    _selectedRole = role;
+    notifyListeners();
   }
 }

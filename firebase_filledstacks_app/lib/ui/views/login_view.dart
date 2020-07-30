@@ -1,3 +1,6 @@
+import 'package:firebase_filledstacks_app/constants/route_names.dart';
+import 'package:firebase_filledstacks_app/locator.dart';
+import 'package:firebase_filledstacks_app/services/navigation_service.dart';
 import 'package:firebase_filledstacks_app/ui/shared/ui_helpers.dart';
 import 'package:firebase_filledstacks_app/ui/widgets/busy_button.dart';
 import 'package:firebase_filledstacks_app/ui/widgets/input_field.dart';
@@ -9,6 +12,7 @@ import 'package:firebase_filledstacks_app/viewmodels/login_view_model.dart';
 class LoginView extends StatelessWidget {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final NavigationService _navigationService = locator<NavigationService>();
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +62,7 @@ class LoginView extends StatelessWidget {
                 TextLink(
                   'Create an Account if you\'re new.',
                   onPressed: () {
-                    // TODO: Handle navigation
+                    _navigationService.navigateTo(SignUpViewRoute);
                   },
                 )
               ],
