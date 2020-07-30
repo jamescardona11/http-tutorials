@@ -12,7 +12,7 @@ class SignUpView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelProvider<SignUpViewModel>.withConsumer(
-      viewModel: SignUpViewModel(),
+      viewModelBuilder: () => SignUpViewModel(),
       builder: (context, model, child) => Scaffold(
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 50.0),
@@ -47,8 +47,12 @@ class SignUpView extends StatelessWidget {
                 children: [
                   BusyButton(
                     title: 'Sign Up',
+                    busy: model.busy,
                     onPressed: () {
-                      // TODO: Perform firebase login here
+                      model.signUp(
+                        email: emailController.text,
+                        password: passwordController.text,
+                      );
                     },
                   )
                 ],
