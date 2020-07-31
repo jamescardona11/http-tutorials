@@ -14,7 +14,7 @@ abstract class MovieService extends ChopperService {
         _$MovieService(),
       ],
       interceptors: [
-        //HeaderInterceptor(),
+        HeaderInterceptor(),
         HttpLoggingInterceptor(),
         (Request request) async {
           if (request.method == HttpMethod.Get) {
