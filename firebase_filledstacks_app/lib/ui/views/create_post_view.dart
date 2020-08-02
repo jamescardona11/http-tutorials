@@ -1,3 +1,4 @@
+import 'package:firebase_filledstacks_app/models/post_model.dart';
 import 'package:firebase_filledstacks_app/ui/shared/ui_helpers.dart';
 import 'package:firebase_filledstacks_app/ui/widgets/input_field.dart';
 import 'package:firebase_filledstacks_app/viewmodels/create_post_viewmodel.dart';
@@ -6,13 +7,18 @@ import 'package:provider_architecture/provider_architecture.dart';
 
 class CreatePostView extends StatelessWidget {
   final titleController = TextEditingController();
+  final Post edittingPost;
 
-  CreatePostView({Key key}) : super(key: key);
+  CreatePostView({Key key, this.edittingPost}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ViewModelProvider<CreatePostViewModel>.withConsumer(
       viewModelBuilder: () => CreatePostViewModel(),
+      onModelReady: (model) {
+        titleController.text = edittingPost?.title ?? '';
+        model.setEdittingPost(edittingPost);
+      },
       builder: (context, model, child) => Scaffold(
           floatingActionButton: FloatingActionButton(
             child: !model.busy

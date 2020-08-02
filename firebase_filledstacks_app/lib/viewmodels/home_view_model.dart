@@ -31,6 +31,10 @@ class HomeViewModel extends BaseModel {
     }
   }
 
+  void editPost(int index) {
+    _navigationService.navigateTo(CreatePostViewRoute, arguments: _posts[index]);
+  }
+
   void listenToPosts() {
     setBusy(true);
     _firestoreService.listenToPostsRealTime().listen((postsData) {

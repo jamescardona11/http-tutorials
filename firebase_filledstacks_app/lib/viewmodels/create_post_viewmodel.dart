@@ -8,14 +8,24 @@ import 'package:flutter/foundation.dart';
 import '../locator.dart';
 
 class CreatePostViewModel extends BaseModel {
+  Post _edittingPost;
+
   final FirestoreService _firestoreService = locator<FirestoreService>();
   final DialogService _dialogService = locator<DialogService>();
   final NavigationService _navigationService = locator<NavigationService>();
 
   Future addPost({@required String title}) async {
     setBusy(true);
-    var result = await _firestoreService
-        .addPost(Post(title: title, userId: currentUser.id)); // We need to add the current userId
+    var result;
+    if (!_editting) {
+      result = await _firestoreService.addPost(Post(title: title, userId: currentUser.id));
+    } else {
+      result = await _firestoreService.updatePost(Post(
+        title: title,
+        userId: _edittingPost.userId,
+        documentId: _edittingPost.documentId,
+      ));
+    }
     setBusy(false);
 
     if (result is String) {
@@ -32,4 +42,10 @@ class CreatePostViewModel extends BaseModel {
 
     _navigationService.pop();
   }
+
+  void setEdittingPost(Post post) {
+    _edittingPost = post;
+  }
+
+  bool get _editting => _edittingPost != null;
 }

@@ -39,6 +39,20 @@ class FirestoreService {
     }
   }
 
+  Future updatePost(Post post) async {
+    try {
+      await _postsCollectionReference.document(post.documentId).updateData(post.toMap());
+      return true;
+    } catch (e) {
+      // TODO: Find or create a way to repeat error handling without so much repeated code
+      if (e is PlatformException) {
+        return e.message;
+      }
+
+      return e.toString();
+    }
+  }
+
   Future createUser(User user) async {
     try {
       await _usersCollectionReference.document(user.id).setData(user.toJson());
