@@ -1,5 +1,6 @@
 import 'package:firebase_filledstacks_app/constants/route_names.dart';
 import 'package:firebase_filledstacks_app/locator.dart';
+import 'package:firebase_filledstacks_app/services/analytics_service.dart';
 import 'package:firebase_filledstacks_app/services/authentication_service.dart';
 import 'package:firebase_filledstacks_app/services/dialog_service.dart';
 import 'package:firebase_filledstacks_app/services/navigation_service.dart';
@@ -11,6 +12,7 @@ class LoginViewModel extends BaseModel {
   final AuthenticationService _authenticationService = locator<AuthenticationService>();
   final DialogService _dialogService = locator<DialogService>();
   final NavigationService _navigationService = locator<NavigationService>();
+  final AnalyticsService _analyticsService = locator<AnalyticsService>();
 
   Future login({@required String email, @required String password}) async {
     setBusy(true);
@@ -21,6 +23,7 @@ class LoginViewModel extends BaseModel {
 
     if (result is bool) {
       if (result) {
+        await _analyticsService.logLogin();
         _navigationService.navigateTo(HomeViewRoute);
       } else {
         await _dialogService.showDialog(

@@ -1,3 +1,4 @@
+import 'package:firebase_filledstacks_app/services/analytics_service.dart';
 import 'package:firebase_filledstacks_app/services/authentication_service.dart';
 import 'package:firebase_filledstacks_app/services/cloud_storage_service.dart';
 import 'package:firebase_filledstacks_app/services/firestore_service.dart';
@@ -17,4 +18,5 @@ void setupLocator() {
   locator.registerLazySingleton(() => CloudStorageService());
   locator.registerLazySingleton(() => ImageSelector());
   locator.registerLazySingleton(() => PushNotificationService());
+  locator.registerLazySingleton(() => AnalyticsService());
 }

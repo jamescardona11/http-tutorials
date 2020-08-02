@@ -1,6 +1,6 @@
+import 'package:firebase_filledstacks_app/services/analytics_service.dart';
 import 'package:firebase_filledstacks_app/ui/views/signup_view.dart';
 import 'package:firebase_filledstacks_app/ui/views/startup_view.dart';
-import 'package:firebase_filledstacks_app/utils/push_notifications_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_filledstacks_app/services/navigation_service.dart';
 import 'package:firebase_filledstacks_app/services/dialog_service.dart';
@@ -16,24 +16,7 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  @override
-  void initState() {
-    super.initState();
-
-    /* final pushProvider = PushNotificationProvider();
-    pushProvider.initNotification();
-    pushProvider.message.listen((argument) {
-      print('Argument del push');
-      print(argument);
-    });*/
-  }
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -52,6 +35,9 @@ class _MyAppState extends State<MyApp> {
       ),
       home: StartUpView(),
       onGenerateRoute: generateRoute,
+      navigatorObservers: [
+        locator<AnalyticsService>().getAnalyticsObserver(),
+      ],
     );
   }
 }
