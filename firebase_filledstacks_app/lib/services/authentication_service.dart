@@ -22,13 +22,11 @@ class AuthenticationService {
   }) async {
     try {
       var authResult = await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
-
       await _populateCurrentUser(authResult.user);
 
       return authResult != null;
     } catch (e) {
-      debugPrint('$e');
-      return e.message;
+      return e;
     }
   }
 
