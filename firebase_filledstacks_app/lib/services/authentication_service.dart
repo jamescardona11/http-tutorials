@@ -27,6 +27,7 @@ class AuthenticationService {
 
       return authResult != null;
     } catch (e) {
+      debugPrint('$e');
       return e.message;
     }
   }

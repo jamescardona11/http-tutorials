@@ -1,12 +1,56 @@
+import 'package:firebase_filledstacks_app/models/post_model.dart';
+import 'package:firebase_filledstacks_app/ui/shared/ui_helpers.dart';
+import 'package:firebase_filledstacks_app/ui/widgets/post_item.dart';
+import 'package:firebase_filledstacks_app/viewmodels/home_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider_architecture/_viewmodel_provider.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('Home'),
-    );
+    return ViewModelProvider<HomeViewModel>.withConsumer(
+        viewModelBuilder: () => HomeViewModel(),
+        onModelReady: (model) => model.listenToPosts(),
+        builder: (context, model, child) => Scaffold(
+              backgroundColor: Colors.white,
+              floatingActionButton: FloatingActionButton(
+                backgroundColor: Theme.of(context).primaryColor,
+                child: !model.busy ? Icon(Icons.add) : CircularProgressIndicator(),
+                onPressed: model.navigateToCreateView,
+              ),
+              body: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    verticalSpace(35),
+                    Row(
+                      children: <Widget>[
+                        SizedBox(
+                          height: 20,
+                          child: Image.asset('assets/images/title.png'),
+                        ),
+                      ],
+                    ),
+                    Expanded(
+                        child: model.posts != null
+                            ? ListView.builder(
+                                itemCount: model.posts.length,
+                                itemBuilder: (context, index) => PostItem(
+                                  post: model.posts[index],
+                                ),
+                              )
+                            : Center(
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor),
+                                ),
+                              ))
+                  ],
+                ),
+              ),
+            ));
   }
 }
