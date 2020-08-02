@@ -15,7 +15,7 @@ class FirestoreService {
     _postsCollectionReference.snapshots().listen((postSnapshot) {
       if (postSnapshot.documents.isNotEmpty) {
         var posts = postSnapshot.documents
-            .map((snapshot) => Post.fromMap(snapshot.data))
+            .map((snapshot) => Post.fromMap(snapshot.data, snapshot.documentID))
             .where((element) => element.title != null)
             .toList();
 
@@ -24,6 +24,10 @@ class FirestoreService {
     });
 
     return _postController.stream;
+  }
+
+  Future deletePost(String documentId) async {
+    await _postsCollectionReference.document(documentId).delete();
   }
 
   Future addPost(Post post) async {
@@ -57,7 +61,7 @@ class FirestoreService {
       var postDocuments = await _postsCollectionReference.getDocuments();
       if (postDocuments.documents.isNotEmpty) {
         return postDocuments.documents
-            .map((snapshot) => Post.fromMap(snapshot.data))
+            .map((snapshot) => Post.fromMap(snapshot.data, snapshot.documentID))
             .where((mappedItem) => mappedItem.title != null)
             .toList();
       }

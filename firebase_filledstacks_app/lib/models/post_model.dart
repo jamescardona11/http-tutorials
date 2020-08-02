@@ -4,9 +4,12 @@ class Post {
   final String title;
   final String imageUrl;
   final String userId;
+  final String documentId;
+
   Post({
     @required this.userId,
     @required this.title,
+    this.documentId,
     this.imageUrl,
   });
 
@@ -18,13 +21,15 @@ class Post {
     };
   }
 
-  static Post fromMap(Map<String, dynamic> map) {
+  // Add the document ID to the post model when serialising.
+  static Post fromMap(Map<String, dynamic> map, String documentId) {
     if (map == null) return null;
 
     return Post(
       title: map['title'],
       imageUrl: map['imageUrl'],
       userId: map['userId'],
+      documentId: documentId,
     );
   }
 }
