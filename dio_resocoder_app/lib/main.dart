@@ -1,7 +1,10 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_resocoder_app/retry_interceptor.dart';
 
 import 'package:flutter/material.dart';
+
+import 'dio_connectivity_request_retrier.dart';
 
 void main() => runApp(MyApp());
 
@@ -32,7 +35,14 @@ class _HomePageState extends State<HomePage> {
     firstPostTitle = 'Press the button 👇';
     isLoading = false;
 
-    // TODO: Add the interceptor to Dio
+    dio.interceptors.add(
+      RetryOnConnectionChangeInterceptor(
+        requestRetrier: DioConnectivityRequestRetrier(
+          dio: dio,
+          connectivity: Connectivity(),
+        ),
+      ),
+    );
   }
 
   @override
